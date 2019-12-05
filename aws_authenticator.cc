@@ -4,8 +4,6 @@
 #include <list>
 #include <string>
 
-#include "envoy/http/header_map.h"
-
 #include "common/common/assert.h"
 #include "common/common/empty_string.h"
 #include "common/common/hex.h"
@@ -14,11 +12,6 @@
 #include "common/http/headers.h"
 #include "common/http/utility.h"
 #include "common/singleton/const_singleton.h"
-
-namespace Envoy {
-namespace Extensions {
-namespace HttpFilters {
-namespace AwsLambda {
 
 class AwsAuthenticatorValues {
 public:
@@ -322,8 +315,3 @@ void AwsAuthenticator::HMACSha256::finalize(uint8_t *out,
                                             unsigned int *out_len) {
   HMAC_Final(&context_, out, out_len);
 }
-
-} // namespace AwsLambda
-} // namespace HttpFilters
-} // namespace Extensions
-} // namespace Envoy

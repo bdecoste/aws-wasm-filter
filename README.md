@@ -1,24 +1,36 @@
-# Envoy Lambda filter
+This compiles an example filter for envoy WASM.
 
-This project links an AWS Lambda HTTP filter with the Envoy binary.
-A new filter `io.solo.aws_lambda` which redirects requests to AWS Lambda is introduced.
+# build filter
+build with
+```
+bazel build :filter.wasm
+```
 
-## Building
+Filter will be in:
+```
+./bazel-bin/filter.wasm
+```
 
-To build the Envoy static binary:
+# build config descriptors
 
-`bazel build //:envoy`
+build descriptors with:
+```
+bazel build :filter_proto
+```
 
-## Testing
+Descriptors will be in:
+```
+./bazel-bin/filter_proto-descriptor-set.proto.bin
+```
 
-To run the all tests:
+Note: 
+on a mac, please run
+```
+xcode-select --install
+```
 
-`bazel test //test/...`
-
-To run the all tests in debug mode:
-
-`bazel test //test/... -c dbg`
-
-To run integration tests using a clang build:
-
-`CXX=clang++-5.0 CC=clang-5.0  bazel test -c dbg --config=clang-tsan //test/integration:lambda_filter_integration_test --runs_per_test=10`
+and Potentially:
+```
+brew install python@2
+```
+as the python bundled with catalina may have issues with ssl certs.

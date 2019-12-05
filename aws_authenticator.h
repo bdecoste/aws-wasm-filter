@@ -2,18 +2,9 @@
 #include <set>
 #include <string>
 
-#include "envoy/buffer/buffer.h"
-#include "envoy/common/time.h"
-#include "envoy/http/header_map.h"
-
 #include "openssl/digest.h"
 #include "openssl/hmac.h"
 #include "openssl/sha.h"
-
-namespace Envoy {
-namespace Extensions {
-namespace HttpFilters {
-namespace AwsLambda {
 
 typedef bool (*LowerCaseStringCompareFunc)(const Http::LowerCaseString &,
                                            const Http::LowerCaseString &);
@@ -126,8 +117,3 @@ private:
 
   Http::HeaderMap *request_headers_{};
 };
-
-} // namespace AwsLambda
-} // namespace HttpFilters
-} // namespace Extensions
-} // namespace Envoy

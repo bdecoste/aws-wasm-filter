@@ -15,6 +15,18 @@ http_archive(
   ]
 )
 
+http_archive(
+  name = 'boringssl',
+  url = 'https://github.com/google/boringssl/archive/65e0aad1b721a5aa67f2a8041cf48f691139bb9f.tar.gz',
+  strip_prefix = "boringssl-65e0aad1b721a5aa67f2a8041cf48f691139bb9f",
+)
+
+#http_archive(
+#  name = 'com_google_absl',
+#  url = 'https://github.com/abseil/abseil-cpp/archive/14550beb3b7b97195e483fb74b5efb906395c31e.tar.gz',
+#  strip_prefix = "abseil-cpp-14550beb3b7b97195e483fb74b5efb906395c31e",
+#)
+
 # TODO: consider fixing this so that we don't need install and activate above.
 # http_archive(
 #   name = 'emscripten_clang',
