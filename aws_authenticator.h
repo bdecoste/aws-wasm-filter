@@ -1,4 +1,5 @@
 #pragma once
+#include <chrono>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -31,11 +32,11 @@ public:
   static HeaderList
   createHeaderToSign(std::initializer_list<std::string> headers);
 
-  AwsAuthenticator::findQueryStringStart(const std::string& path)
+  std::string AwsAuthenticator::findQueryStringStart(const std::string& path)
 
 private:
 
-  std::string signWithTime(std::unordered_map<std::string, sstd::tring> *request_headers,
+  std::string signWithTime(std::unordered_map<std::string, std::string> *request_headers,
                            const HeaderList &headers_to_sign,
                            const std::string &region, SystemTime now);
 
@@ -67,8 +68,6 @@ private:
   public:
     static const int LENGTH = SHA256_DIGEST_LENGTH;
     Sha256();
-    void update(const Buffer::Instance &data);
-    void update(const std::string &data);
     void update(const std::string &data);
 
     void update(char c);

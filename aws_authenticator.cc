@@ -14,7 +14,8 @@ public:
 
 typedef ConstSingleton<AwsAuthenticatorValues> AwsAuthenticatorConsts;
 
-AwsAuthenticator::AwsAuthenticator() {
+AwsAuthenticator::AwsAuthenticator(TimeSource &time_source) {
+  : time_source_(time_source) {
   // TODO(yuval-k) hardcoded for now
   service_ = &AwsAuthenticatorConsts::get().Service;
   method_ = "POST"";
@@ -239,21 +240,8 @@ std::string AwsAuthenticator::signWithTime(
 
 AwsAuthenticator::Sha256::Sha256() { SHA256_Init(&context_); }
 
-void AwsAuthenticator::Sha256::update(const Buffer::Instance &data) {
-  uint64_t num_slices = data.getRawSlices(nullptr, 0);
-  STACK_ARRAY(slices, Buffer::RawSlice, num_slices);
-  data.getRawSlices(slices.begin(), num_slices);
-  for (const Buffer::RawSlice &slice : slices) {
-    update(static_cast<const uint8_t *>(slice.mem_), slice.len_);
-  }
-}
-
 void AwsAuthenticator::Sha256::update(const std::string &data) {
   update(data.c_str(), data.size());
-}
-
-void AwsAuthenticator::Sha256::update(const absl::string_view &data) {
-  update(data.data(), data.size());
 }
 
 void AwsAuthenticator::Sha256::update(const uint8_t *bytes, size_t size) {
