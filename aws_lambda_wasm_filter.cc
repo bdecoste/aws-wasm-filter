@@ -40,6 +40,7 @@ void AwsLambdaFilterContext::onCreate() { LOG_DEBUG(std::string("onCreate " + st
 
 FilterHeadersStatus AwsLambdaFilterContext::onRequestHeaders(uint32_t) {
   LOG_DEBUG(std::string("onRequestHeaders ") + std::to_string(id()));
+  lambdafy();
   return FilterHeadersStatus::Continue;
 }
 
