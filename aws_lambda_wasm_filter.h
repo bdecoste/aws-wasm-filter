@@ -4,6 +4,8 @@
 #include <iostream>
 #include <unordered_map>
 
+#include "aws_authenticator.h"
+
 //#include "absl/types/optional.h"
 #include "google/protobuf/util/json_util.h"
 #include "proxy_wasm_intrinsics.h"
@@ -43,7 +45,7 @@ private:
   //absl::optional<std::string> default_body_;
   std::string default_body_;
 
-  Http::HeaderMap *request_headers_{};
+  unordered_map<string, string> request_headers_;
   AwsAuthenticator aws_authenticator_;
 
   static std::string functionUrlPath(const std::string &name,
