@@ -1,5 +1,4 @@
 #pragma once
-#include <chrono>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -7,6 +6,17 @@
 #include "openssl/digest.h"
 #include "openssl/hmac.h"
 #include "openssl/sha.h"
+
+using SystemTime = std::chrono::time_point<std::chrono::system_clock>;
+using MonotonicTime = std::chrono::time_point<std::chrono::steady_clock>;
+
+class TimeSource {
+public:
+  // TimeSource
+  SystemTime systemTime() { return std::chrono::system_clock::now(); }
+  MonotonicTime monotonicTime() { return std::chrono::steady_clock::now(); }
+};
+
 
 typedef bool (*LowerCaseStringCompareFunc)(const std::string &,
                                            const std::string &);
@@ -32,7 +42,7 @@ public:
   static HeaderList
   createHeaderToSign(std::initializer_list<std::string> headers);
 
-  std::string AwsAuthenticator::findQueryStringStart(const std::string& path)
+  std::string AwsAuthenticator::findQueryStringStart(const std::string& path);
 
 private:
 
