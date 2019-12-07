@@ -6,14 +6,14 @@
 #include "openssl/hmac.h"
 #include "openssl/sha.h"
 
-typedef bool (*LowerCaseStringCompareFunc)(const Http::LowerCaseString &,
-                                           const Http::LowerCaseString &);
+typedef bool (*LowerCaseStringCompareFunc)(const std::string &,
+                                           const std::string &);
 
-typedef std::set<Http::LowerCaseString, LowerCaseStringCompareFunc> HeaderList;
+typedef std::set<std::string, LowerCaseStringCompareFunc> HeaderList;
 
 class AwsAuthenticator {
 public:
-  AwsAuthenticator(TimeSource &time_source);
+  AwsAuthenticator();
 
   ~AwsAuthenticator();
 
@@ -21,20 +21,20 @@ public:
 
   void updatePayloadHash(const Buffer::Instance &data);
 
-  void sign(Http::HeaderMap *request_headers, const HeaderList &headers_to_sign,
+  void sign(unordered_map<string, string> *request_headers, const HeaderList &headers_to_sign,
             const std::string &region);
 
   /**
    * This creates a a list of headers to sign to be used by sign.
    */
   static HeaderList
-  createHeaderToSign(std::initializer_list<Http::LowerCaseString> headers);
+  createHeaderToSign(std::initializer_list<std::string> headers);
+
+  AwsAuthenticator::findQueryStringStart(const HeaderString& path)
 
 private:
-  // TODO(yuval-k) can I refactor our the friendliness?
-  friend class AwsAuthenticatorTest;
 
-  std::string signWithTime(Http::HeaderMap *request_headers,
+  std::string signWithTime(unordered_map<string, string> *request_headers,
                            const HeaderList &headers_to_sign,
                            const std::string &region, SystemTime now);
 
@@ -59,8 +59,8 @@ private:
                                const std::string &request_date_time,
                                const std::string &hashed_canonical_request);
 
-  static bool lowercasecompare(const Http::LowerCaseString &i,
-                               const Http::LowerCaseString &j);
+  static bool lowercasecompare(const std::string &i,
+                               std::string &j);
 
   class Sha256 {
   public:
@@ -68,7 +68,7 @@ private:
     Sha256();
     void update(const Buffer::Instance &data);
     void update(const std::string &data);
-    void update(const absl::string_view &data);
+    void update(const std::string &data);
 
     void update(char c);
     void update(const uint8_t *bytes, size_t size);
@@ -115,5 +115,5 @@ private:
   absl::string_view query_string_{};
   absl::string_view url_base_{};
 
-  Http::HeaderMap *request_headers_{};
+  unordered_map<string, string> request_headers_;
 };

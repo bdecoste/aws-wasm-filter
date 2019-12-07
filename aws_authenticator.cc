@@ -9,16 +9,15 @@ public:
   const std::string Algorithm{"AWS4-HMAC-SHA256"};
   const std::string Service{"lambda"};
   const std::string Newline{"\n"};
-  const Http::LowerCaseString DateHeader{"x-amz-date"};
+  const std::string DateHeader{"x-amz-date"};
 };
 
 typedef ConstSingleton<AwsAuthenticatorValues> AwsAuthenticatorConsts;
 
-AwsAuthenticator::AwsAuthenticator(TimeSource &time_source)
-    : time_source_(time_source) {
+AwsAuthenticator::AwsAuthenticator() {
   // TODO(yuval-k) hardcoded for now
   service_ = &AwsAuthenticatorConsts::get().Service;
-  method_ = &Http::Headers::get().MethodValues.Post;
+  method_ = "POST"";
 }
 
 void AwsAuthenticator::init(const std::string *access_key,
@@ -31,7 +30,7 @@ void AwsAuthenticator::init(const std::string *access_key,
 AwsAuthenticator::~AwsAuthenticator() {}
 
 HeaderList AwsAuthenticator::createHeaderToSign(
-    std::initializer_list<Http::LowerCaseString> headers) {
+    std::initializer_list<std::string> headers) {
   // A C++ set is sorted. which is required by AWS signature algorithm.
   HeaderList ret(AwsAuthenticator::lowercasecompare);
   ret.insert(headers);
@@ -43,8 +42,8 @@ void AwsAuthenticator::updatePayloadHash(const Buffer::Instance &data) {
   body_sha_.update(data);
 }
 
-bool AwsAuthenticator::lowercasecompare(const Http::LowerCaseString &i,
-                                        const Http::LowerCaseString &j) {
+bool AwsAuthenticator::lowercasecompare(unordered_map<string, string> &i,
+                                        const unordered_map<string, string> &j) {
   return (i.get() < j.get());
 }
 
@@ -64,10 +63,7 @@ AwsAuthenticator::prepareHeaders(const HeaderList &headers_to_sign) {
 
   for (auto header = headers_to_sign.begin(), end = headers_to_sign.end();
        header != end; header++) {
-    const Http::HeaderEntry *headerEntry = request_headers_->get(*header);
-    if (headerEntry == nullptr) {
-      request_headers_->lookup(*header, &headerEntry);
-    }
+    const std::string headerEntry = request_headers_.at(*header);
 
     auto headerName = header->get();
     canonical_headers_stream << headerName;
@@ -75,7 +71,7 @@ AwsAuthenticator::prepareHeaders(const HeaderList &headers_to_sign) {
 
     canonical_headers_stream << ':';
     if (headerEntry != nullptr) {
-      canonical_headers_stream << headerEntry->value().getStringView();
+      canonical_headers_stream << headerEntry;
       // TODO: add warning if null
     }
     canonical_headers_stream << '\n';
@@ -102,14 +98,20 @@ std::string AwsAuthenticator::getBodyHexSha() {
 }
 
 void AwsAuthenticator::fetchUrl() {
-  const Http::HeaderString &canonical_url = request_headers_->Path()->value();
+  const std::string &canonical_url = request_headers_->Path()->value();
   url_base_ = canonical_url.getStringView();
-  query_string_ = Http::Utility::findQueryStringStart(canonical_url);
+  query_string_ = findQueryStringStart(canonical_url);
   if (query_string_.length() != 0) {
     url_base_.remove_suffix(query_string_.length());
     // remove the question mark
     query_string_.remove_prefix(1);
   }
+}
+
+std::string AwsAuthenticator::findQueryStringStart(const HeaderString& path) {
+  std::string path_str = path;
+
+  return path_str;
 }
 
 std::string AwsAuthenticator::computeCanonicalRequestHash(
@@ -184,7 +186,7 @@ std::string AwsAuthenticator::computeSignature(
   return Hex::encode(out.begin(), out_len);
 }
 
-void AwsAuthenticator::sign(Http::HeaderMap *request_headers,
+void AwsAuthenticator::sign(unordered_map<string, string> *request_headers,
                             const HeaderList &headers_to_sign,
                             const std::string &region) {
 
@@ -198,7 +200,7 @@ void AwsAuthenticator::sign(Http::HeaderMap *request_headers,
 }
 
 std::string AwsAuthenticator::signWithTime(
-    Http::HeaderMap *request_headers, const HeaderList &headers_to_sign,
+    unordered_map<string, string> *request_headers, const HeaderList &headers_to_sign,
     const std::string &region,
     std::chrono::time_point<std::chrono::system_clock> now) {
   request_headers_ = request_headers;
