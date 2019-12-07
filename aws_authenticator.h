@@ -22,7 +22,7 @@ public:
 
   void updatePayloadHash(const uint8_t* data);
 
-  void sign(unordered_map<std::string, std::string> *request_headers, const HeaderList &headers_to_sign,
+  void sign(std::unordered_map<std::string, std::string> *request_headers, const HeaderList &headers_to_sign,
             const std::string &region);
 
   /**
@@ -35,7 +35,7 @@ public:
 
 private:
 
-  std::string signWithTime(unordered_map<string, string> *request_headers,
+  std::string signWithTime(std::unordered_map<string, string> *request_headers,
                            const HeaderList &headers_to_sign,
                            const std::string &region, SystemTime now);
 
@@ -116,5 +116,5 @@ private:
   absl::string_view query_string_{};
   absl::string_view url_base_{};
 
-  unordered_map<string, string> request_headers_;
+  std::unordered_map<string, string> request_headers_;
 };
