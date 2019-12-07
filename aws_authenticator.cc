@@ -1,17 +1,8 @@
-#include "extensions/filters/http/aws_lambda/aws_authenticator.h"
+#include "aws_authenticator.h"
 
 #include <algorithm>
 #include <list>
 #include <string>
-
-#include "common/common/assert.h"
-#include "common/common/empty_string.h"
-#include "common/common/hex.h"
-#include "common/common/stack_array.h"
-#include "common/common/utility.h"
-#include "common/http/headers.h"
-#include "common/http/utility.h"
-#include "common/singleton/const_singleton.h"
 
 class AwsAuthenticatorValues {
 public:
