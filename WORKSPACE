@@ -21,8 +21,8 @@ git_repository(
     commit = "5565939d4203234ddc742c02241ce4523e7b3beb",
 )
 bind(
-    name = "bssl",
-    actual = "@boringssl//:ssl",
+    name = "ssl",
+    actual = "@boringssl//:bssl",
 )
 
 #http_archive(
