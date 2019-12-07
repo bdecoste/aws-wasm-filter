@@ -15,10 +15,14 @@ http_archive(
   ]
 )
 
-http_archive(
-  name = 'boringssl',
-  url = 'https://github.com/google/boringssl/archive/65e0aad1b721a5aa67f2a8041cf48f691139bb9f.tar.gz',
-  strip_prefix = "boringssl-65e0aad1b721a5aa67f2a8041cf48f691139bb9f",
+git_repository(
+    name = "boringssl",
+    remote = "https://github.com/google/boringssl",
+    commit = "5565939d4203234ddc742c02241ce4523e7b3beb",
+)
+bind(
+    name = "ssl",
+    actual = "@boringssl//:ssl",
 )
 
 #http_archive(

@@ -31,11 +31,11 @@ public:
   static HeaderList
   createHeaderToSign(std::initializer_list<std::string> headers);
 
-  AwsAuthenticator::findQueryStringStart(const HeaderString& path)
+  AwsAuthenticator::findQueryStringStart(const std::string& path)
 
 private:
 
-  std::string signWithTime(std::unordered_map<string, string> *request_headers,
+  std::string signWithTime(std::unordered_map<std::string, sstd::tring> *request_headers,
                            const HeaderList &headers_to_sign,
                            const std::string &region, SystemTime now);
 
@@ -113,8 +113,8 @@ private:
   std::string first_key_;
   const std::string *service_{};
   const std::string *method_{};
-  absl::string_view query_string_{};
-  absl::string_view url_base_{};
+  std::string query_string_;
+  std::string url_base;
 
-  std::unordered_map<string, string> request_headers_;
+  std::unordered_map<std::string, std::string> request_headers_;
 };

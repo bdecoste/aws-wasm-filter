@@ -108,7 +108,7 @@ void AwsAuthenticator::fetchUrl() {
   }
 }
 
-std::string AwsAuthenticator::findQueryStringStart(const HeaderString& path) {
+std::string AwsAuthenticator::findQueryStringStart(const std::string& path) {
   std::string path_str = path;
 
   return path_str;
