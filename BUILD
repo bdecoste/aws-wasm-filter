@@ -38,7 +38,6 @@ cc_library(
         "aws_authenticator.h"
     ],
     deps = [
-        "@boringssl//:crypto",
-        "@boringssl//:ssl",
+        "@boringssl//:bssl",
     ],
 )
