@@ -42,7 +42,7 @@ void AwsAuthenticator::updatePayloadHash(const Buffer::Instance &data) {
   body_sha_.update(data);
 }
 
-bool AwsAuthenticator::lowercasecompare(unordered_map<string, string> &i,
+bool AwsAuthenticator::lowercasecompare(std::unordered_map<string, string> &i,
                                         const unordered_map<string, string> &j) {
   return (i.get() < j.get());
 }
@@ -186,7 +186,7 @@ std::string AwsAuthenticator::computeSignature(
   return Hex::encode(out.begin(), out_len);
 }
 
-void AwsAuthenticator::sign(unordered_map<string, string> *request_headers,
+void AwsAuthenticator::sign(std::unordered_map<string, string> *request_headers,
                             const HeaderList &headers_to_sign,
                             const std::string &region) {
 
@@ -200,7 +200,7 @@ void AwsAuthenticator::sign(unordered_map<string, string> *request_headers,
 }
 
 std::string AwsAuthenticator::signWithTime(
-    unordered_map<string, string> *request_headers, const HeaderList &headers_to_sign,
+    std::unordered_map<string, string> *request_headers, const HeaderList &headers_to_sign,
     const std::string &region,
     std::chrono::time_point<std::chrono::system_clock> now) {
   request_headers_ = request_headers;
