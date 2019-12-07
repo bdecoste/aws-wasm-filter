@@ -1,6 +1,7 @@
 #pragma once
 #include <set>
 #include <string>
+#include <unordered_map>
 
 #include "openssl/digest.h"
 #include "openssl/hmac.h"
@@ -19,9 +20,9 @@ public:
 
   void init(const std::string *access_key, const std::string *secret_key);
 
-  void updatePayloadHash(const Buffer::Instance &data);
+  void updatePayloadHash(const uint8_t* data);
 
-  void sign(unordered_map<string, string> *request_headers, const HeaderList &headers_to_sign,
+  void sign(unordered_map<std::string, std::string> *request_headers, const HeaderList &headers_to_sign,
             const std::string &region);
 
   /**
