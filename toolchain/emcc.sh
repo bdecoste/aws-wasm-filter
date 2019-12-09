@@ -17,6 +17,8 @@ do
         # some zlib headers are treated as system headers
         sed -e 's%[^ ]*/external/zlib/%external/zlib/%' $arg > $arg.tmp
         mv $arg.tmp $arg
+        sed -e 's%[^ ]*/external/boringssl/%external/boringssl/%' $arg > $arg.tmp
+        mv $arg.tmp $arg
         break
     fi
 done
