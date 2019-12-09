@@ -15,10 +15,25 @@ http_archive(
   ]
 )
 
+
 git_repository(
     name = "boringssl",
     remote = "https://github.com/google/boringssl",
     commit = "5565939d4203234ddc742c02241ce4523e7b3beb",
+)
+load("@boringssl//:BUILD.generated.bzl",
+    "crypto_headers",
+    "crypto_internal_headers",
+    "crypto_sources",
+    "crypto_sources_linux_x86_64",
+    "crypto_sources_linux_ppc64le",
+    "crypto_sources_mac_x86_64",
+    "fips_fragments",
+    "ssl_headers",
+    "ssl_internal_headers",
+    "ssl_sources",
+    "tool_sources",
+    "tool_headers",
 )
 bind(
     name = "ssl",
